@@ -37,7 +37,7 @@ internal static class Program
 
         rootCommand.AddCommand(readCommand);
 
-        rdfadCommand.SetHandler (async (file, delay, fgColor, lightMode) =>
+        readCommand.SetHandler (async (file, delay, fgColor, lightMode) =>
             {
                 await ReadFile(file!, delay, fgColor, lightMode);
             },
