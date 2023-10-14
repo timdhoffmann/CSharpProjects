@@ -5,56 +5,31 @@ namespace echod;
 
 internal static class Program
 {
-    static async Task<int> Main(string[] args)
+    /// <summary>
+    /// A clone of the 'echo' Unix utility. Prints its arguments to the console.
+    /// </summary>
+    /// <param name="args">Strings to be printed.</param>
+    /// <returns></returns>
+    static void Main(string[] args)
     {
         var fileOption = new Option<FileInfo?>(
             name: "--file",
             description: "The file to read and display on the console");
 
-        var delayOption = new Option<int>(
-            name: "--delay",
-            description: "Delay to show between lines.",
-            getDefaultValue: () => 42);
+        var rootCommand = new RootCommand("An 'echo' clone written in C#/.NET.");
+        rootCommand.AddOption(fileOption);
 
-        var fgColorOption = new Option<ConsoleColor>(
-            name: "--console-color",
-            description: "Foreground color of the text.",
-            getDefaultValue: () => ConsoleColor.White);
-
-        var lightModeOption = new Option<bool>(
-            name: "--light-mode",
-            description: "Shows bright background instead of the default dark one.");
-
-        var rootCommand = new RootCommand("Sample app for System.Commandline.");
-
-        var readCommand = new Command(name: "read", description: "Reads the file specified")
-        {
-            fileOption,
-            delayOption,
-            fgColorOption,
-            lightModeOption
-        };
-
-        rootCommand.AddCommand(readCommand);
-
-        readCommand.SetHandler (async (file, delay, fgColor, lightMode) =>
+        rootCommand.SetHandler ((file) =>
             {
-                await ReadFile(file!, delay, fgColor, lightMode);
+                ReadFile(file!);
             },
-            fileOption, delayOption, fgColorOption, lightModeOption);
+            fileOption);
 
-        return rootCommand.InvokeAsync(args).Result;
+        rootCommand.Invoke(args);
     }
 
-    internal static async Task ReadFile(FileInfo file, int delay, ConsoleColor fgColor, bool isLightMode)
+    internal static void ReadFile(FileInfo file)
     {
-        Console.BackgroundColor = isLightMode ? ConsoleColor.White : ConsoleColor.Black;
-        Console.ForegroundColor = fgColor;
-        var lines = File.ReadLines(file.FullName).ToList();
-        foreach (var line in lines)
-        {
-            Console.WriteLine(line);
-            await Task.Delay(delay * line.Length);
-        }
+        Console.WriteLine("test");
     }
 }
