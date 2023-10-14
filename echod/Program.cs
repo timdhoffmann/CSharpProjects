@@ -12,24 +12,32 @@ internal static class Program
     /// <returns></returns>
     static void Main(string[] args)
     {
-        var fileOption = new Option<FileInfo?>(
-            name: "--file",
-            description: "The file to read and display on the console");
+
+        // TODO: Make this arg required with a minimum of 1 token/values.
+        var textArg = new Argument<String>
+        {
+            Description = "The text to print to the console.",
+            Name = "TEXT"
+        };
+
+        // var newLineOption = new Option<String>(
+        //     name: "--no-newline",
+        //     description: "Omit new line at the end.");
 
         var rootCommand = new RootCommand("An 'echo' clone written in C#/.NET.");
-        rootCommand.AddOption(fileOption);
+        rootCommand.AddArgument(textArg);
 
-        rootCommand.SetHandler ((file) =>
+        rootCommand.SetHandler((text) =>
             {
-                ReadFile(file!);
+                Print(text!);
             },
-            fileOption);
+            textArg);
 
         rootCommand.Invoke(args);
     }
 
-    internal static void ReadFile(FileInfo file)
+    internal static void Print(String text)
     {
-        Console.WriteLine("test");
+        Console.WriteLine(text);
     }
 }
