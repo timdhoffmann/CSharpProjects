@@ -5,6 +5,9 @@ namespace echod;
 
 internal static class Program
 {
+
+    // TODO: p. 45 - writing integration tests.
+
     /// <summary>
     /// A clone of the 'echo' Unix utility. Prints its arguments to the console.
     /// </summary>
@@ -13,7 +16,6 @@ internal static class Program
     static void Main(string[] args)
     {
 
-        // TODO: Make this arg required with a minimum of 1 token/values.
         var textArg = new Argument<string>
         {
             Description = "The text to print to the console.",
