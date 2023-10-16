@@ -14,29 +14,31 @@ internal static class Program
     {
 
         // TODO: Make this arg required with a minimum of 1 token/values.
-        var textArg = new Argument<String>
+        var textArg = new Argument<string>
         {
             Description = "The text to print to the console.",
             Name = "TEXT"
         };
 
-        // var newLineOption = new Option<String>(
-        //     name: "--no-newline",
-        //     description: "Omit new line at the end.");
+        var omitNewLineOpt = new Option<bool>(
+            description: "If present, omit new line at the end.",
+            name: "-n");
 
         var rootCommand = new RootCommand("An 'echo' clone written in C#/.NET.");
         rootCommand.AddArgument(textArg);
+        rootCommand.AddOption(omitNewLineOpt);
 
-        rootCommand.SetHandler((text) =>
+        rootCommand.SetHandler((text, omitNewLineOpt) =>
             {
-                Print(text!);
+                text = (omitNewLineOpt) ? text : $"{text}{Environment.NewLine}";
+                Console.WriteLine(text);
             },
-            textArg);
+            textArg, omitNewLineOpt);
 
         rootCommand.Invoke(args);
     }
 
-    internal static void Print(String text)
+    private static void Print(string text)
     {
         Console.WriteLine(text);
     }
