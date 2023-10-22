@@ -3,7 +3,7 @@ using System.CommandLine.Invocation;
 
 namespace echod;
 
-internal static class Program
+public static class Program
 {
 
     // TODO: p. 45 - writing integration tests.
@@ -13,7 +13,7 @@ internal static class Program
     /// </summary>
     /// <param name="args">Strings to be printed.</param>
     /// <returns></returns>
-    static void Main(string[] args)
+    public static void Main(string[] args)
     {
 
         var textArg = new Argument<string>
