@@ -13,6 +13,10 @@ public class ProgramTests
     // Helper for debug logging.
     private readonly ITestOutputHelper output;
 
+    // Original console output writers for restoring after manipulation.
+    private readonly TextWriter outWriter = Console.Out;
+    private readonly TextWriter errorWriter = Console.Error;
+
     [Fact]
     public void Main_WithoutArgs_StdErrContainsMissingArgs()
     {
@@ -21,15 +25,14 @@ public class ProgramTests
         var args = Array.Empty<string>();
         const string expectedOutput = "Required argument missing for command";
         
-        using var outWriter = new StringWriter();
-        Console.SetOut(outWriter);
-        using var errorWriter = new StringWriter();
-        Console.SetError(errorWriter);
+        using var tempErrWriter = new StringWriter();
+        Console.SetError(tempErrWriter);
 
         // Act
 
         Program.Main(args);
-        var actualOutput = errorWriter.ToString();
+        var actualOutput = tempErrWriter.ToString();
+        Console.SetError(errorWriter);
 
         // Assert
         Assert.Contains(expectedOutput, actualOutput);
@@ -43,20 +46,43 @@ public class ProgramTests
         var args = new [] { "hello" };
         const string expectedOutput = "hello";
 
-        using var outWriter = new StringWriter();
-        Console.SetOut(outWriter);
-        using var errorWriter = new StringWriter();
-        Console.SetError(errorWriter);
+        using var tempOutWriter = new StringWriter();
+        Console.SetOut(tempOutWriter);
 
         // Act
 
         Program.Main(args);
-        var actualOutput = outWriter.ToString();
+        var actualOutput = tempOutWriter.ToString();
+        Console.SetOut(outWriter);
         // To see this being printed to the console, run the test with
         // 'dotnet test --logger "console;verbosity=detailed"'
         output.WriteLine($"[DEBUG] {actualOutput}");
 
         // Assert
         Assert.Contains(expectedOutput, actualOutput);
+    }
+
+    [Fact]
+    public void Main_Input1_MatchesOriginalEcho()
+    {
+        var args = new[] { "Hello there" };
+
+        var originalOutputFilePath = Path.Combine("..", "..", "..", "expected", "hello1.txt");
+        // TODO: handle nonexistant file.
+        // TODO: read and compare line by line with a buffer instead of the whole file at once.
+        var expectedOutput = File.ReadAllText(originalOutputFilePath);
+
+        using var tempOutWriter = new StringWriter();
+        Console.SetOut(tempOutWriter);
+
+        // Act
+        Program.Main(args);
+        var actualOutput = tempOutWriter.ToString();
+        Console.SetOut(outWriter);
+
+        // TODO: How to handle Unix vs Windows line endings? Currently the test only fails due to different line
+        // endings of the Unix file when running on Windows.
+        // Assert
+        Assert.Equal(expectedOutput, actualOutput);
     }
 }
