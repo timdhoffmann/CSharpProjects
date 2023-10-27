@@ -13,6 +13,9 @@ public class ProgramTests
     // Helper for debug logging.
     private readonly ITestOutputHelper output;
 
+    // TODO: can this somehow be locally scoped instead or is it required because the Main method exists longer?
+    private StringWriter stringWriter = new StringWriter();
+
     [Fact]
     public void Main_WithoutArgs_StdErrContainsMissingArgs()
     {
@@ -20,7 +23,7 @@ public class ProgramTests
 
         var args = Array.Empty<string>();
         const string expectedOutput = "Required argument missing for command";
-        using var stringWriter = new StringWriter();
+        var originalError = Console.Error;
         Console.SetError(stringWriter);
 
         // Act
@@ -40,7 +43,6 @@ public class ProgramTests
         var args = new [] { "hello" };
         const string expectedOutput = "hello";
 
-        using var stringWriter = new StringWriter();
         Console.SetOut(stringWriter);
 
         // Act
