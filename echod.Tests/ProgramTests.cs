@@ -13,9 +13,6 @@ public class ProgramTests
     // Helper for debug logging.
     private readonly ITestOutputHelper output;
 
-    // TODO: can this somehow be locally scoped instead or is it required because the Main method exists longer?
-    private StringWriter stringWriter = new StringWriter();
-
     [Fact]
     public void Main_WithoutArgs_StdErrContainsMissingArgs()
     {
@@ -23,13 +20,16 @@ public class ProgramTests
 
         var args = Array.Empty<string>();
         const string expectedOutput = "Required argument missing for command";
-        var originalError = Console.Error;
-        Console.SetError(stringWriter);
+        
+        using var outWriter = new StringWriter();
+        Console.SetOut(outWriter);
+        using var errorWriter = new StringWriter();
+        Console.SetError(errorWriter);
 
         // Act
 
         Program.Main(args);
-        var actualOutput = stringWriter.ToString();
+        var actualOutput = errorWriter.ToString();
 
         // Assert
         Assert.Contains(expectedOutput, actualOutput);
@@ -43,12 +43,15 @@ public class ProgramTests
         var args = new [] { "hello" };
         const string expectedOutput = "hello";
 
-        Console.SetOut(stringWriter);
+        using var outWriter = new StringWriter();
+        Console.SetOut(outWriter);
+        using var errorWriter = new StringWriter();
+        Console.SetError(errorWriter);
 
         // Act
 
         Program.Main(args);
-        var actualOutput = stringWriter.ToString();
+        var actualOutput = outWriter.ToString();
         // To see this being printed to the console, run the test with
         // 'dotnet test --logger "console;verbosity=detailed"'
         output.WriteLine($"[DEBUG] {actualOutput}");
