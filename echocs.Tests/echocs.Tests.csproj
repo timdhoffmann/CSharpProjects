@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\echod\echod.csproj" />
+    <ProjectReference Include="..\echocs\echocs.csproj" />
   </ItemGroup>
 
 </Project>

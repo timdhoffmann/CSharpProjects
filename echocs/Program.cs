@@ -32,7 +32,7 @@ public static class Program
         rootCommand.SetHandler((text, omitNewLineOpt) =>
             {
                 text = (omitNewLineOpt) ? text : $"{text}{Environment.NewLine}";
-                Console.WriteLine(text);
+                Console.Write(text);
             },
             textArg, omitNewLineOpt);
 

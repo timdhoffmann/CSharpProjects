@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "echod", "echod\echod.csproj", "{62EADD6E-ABF5-43CB-9D01-2946A5575CD6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "echocs", "echocs\echocs.csproj", "{62EADD6E-ABF5-43CB-9D01-2946A5575CD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "echod.Tests", "echod.Tests\echod.Tests.csproj", "{4347C559-1236-428A-AE62-3432FE441E91}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "echocs.Tests", "echocs.Tests\echocs.Tests.csproj", "{4347C559-1236-428A-AE62-3432FE441E91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

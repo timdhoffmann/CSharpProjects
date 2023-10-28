@@ -68,9 +68,9 @@ public class ProgramTests
         var args = new[] { "Hello there" };
 
         var originalOutputFilePath = Path.Combine("..", "..", "..", "expected", "hello1.txt");
-        // TODO: handle nonexistant file.
+        // TODO: handle nonexistent file.
         // TODO: read and compare line by line with a buffer instead of the whole file at once.
-        var expectedOutput = File.ReadAllText(originalOutputFilePath);
+        var expectedOutput = File.ReadAllText(originalOutputFilePath).ReplaceLineEndings();
 
         using var tempOutWriter = new StringWriter();
         Console.SetOut(tempOutWriter);
@@ -80,8 +80,6 @@ public class ProgramTests
         var actualOutput = tempOutWriter.ToString();
         Console.SetOut(outWriter);
 
-        // TODO: How to handle Unix vs Windows line endings? Currently the test only fails due to different line
-        // endings of the Unix file when running on Windows.
         // Assert
         Assert.Equal(expectedOutput, actualOutput);
     }
