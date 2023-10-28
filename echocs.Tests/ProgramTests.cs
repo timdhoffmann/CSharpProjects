@@ -65,12 +65,15 @@ public class ProgramTests
     [Fact]
     public void Main_Input1_MatchesOriginalEcho()
     {
+        // Omitting try catch block since it is only tests.
+
         var args = new[] { "Hello there" };
 
         var originalOutputFilePath = Path.Combine("..", "..", "..", "expected", "hello1.txt");
-        // TODO: handle nonexistent file.
-        // TODO: read and compare line by line with a buffer instead of the whole file at once.
-        var expectedOutput = File.ReadAllText(originalOutputFilePath).ReplaceLineEndings();
+        // TODO: read and compare line by line with a buffer instead of the whole file at once. However, would also
+        // need to read the console output line-by-line.
+        using var sr = new StreamReader(originalOutputFilePath);
+        var expectedOutput = sr.ReadToEnd().ReplaceLineEndings();
 
         using var tempOutWriter = new StringWriter();
         Console.SetOut(tempOutWriter);
