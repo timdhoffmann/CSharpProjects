@@ -17,6 +17,8 @@ public class ProgramTests
     private readonly TextWriter outWriter = Console.Out;
     private readonly TextWriter errorWriter = Console.Error;
 
+    private readonly string expectedOutFilesDirPath = Path.Combine("..", "..", "..", "expected");
+
     [Fact]
     public void Main_WithoutArgs_StdErrContainsMissingArgs()
     {
@@ -63,15 +65,38 @@ public class ProgramTests
     }
 
     [Fact]
-    public void Main_Input1_MatchesOriginalEcho()
+    public void Main_Hello1Args_MatchOriginalEcho()
     {
         // Omitting try catch block since it is only tests.
 
         var args = new[] { "Hello there" };
 
-        var originalOutputFilePath = Path.Combine("..", "..", "..", "expected", "hello1.txt");
+        var originalOutputFilePath = Path.Combine(expectedOutFilesDirPath, "hello1.txt");
         // TODO: read and compare line by line with a buffer instead of the whole file at once. However, would also
         // need to read the console output line-by-line.
+        using var sr = new StreamReader(originalOutputFilePath);
+        var expectedOutput = sr.ReadToEnd().ReplaceLineEndings();
+
+        using var tempOutWriter = new StringWriter();
+        Console.SetOut(tempOutWriter);
+
+        // Act
+        Program.Main(args);
+        var actualOutput = tempOutWriter.ToString();
+        Console.SetOut(outWriter);
+
+        // Assert
+        Assert.Equal(expectedOutput, actualOutput);
+    }
+
+    [Fact]
+    public void Main_Hello2Args_MatchOriginalEcho()
+    {
+        // Arrange
+
+        var args = new[] { "Hello", "there" };
+
+        var originalOutputFilePath = Path.Combine(expectedOutFilesDirPath, "hello2.txt");
         using var sr = new StreamReader(originalOutputFilePath);
         var expectedOutput = sr.ReadToEnd().ReplaceLineEndings();
 

@@ -5,7 +5,7 @@ namespace echod;
 public static class Program
 {
 
-    // TODO: p. 45 - writing integration tests.
+    // TODO: p. 51 - next: write helper function.
 
     /// <summary>
     /// A clone of the 'echo' Unix utility. Prints its arguments to the console.
@@ -15,10 +15,11 @@ public static class Program
     public static void Main(string[] args)
     {
 
-        var textArg = new Argument<string>
+        var textArg = new Argument<string[]>
         {
             Description = "The text to print to the console.",
-            Name = "TEXT"
+            Name = "TEXT",
+            Arity = ArgumentArity.OneOrMore
         };
 
         var omitNewLineOpt = new Option<bool>(
@@ -31,8 +32,9 @@ public static class Program
 
         rootCommand.SetHandler((text, omitNewLineOpt) =>
             {
-                text = (omitNewLineOpt) ? text : $"{text}{Environment.NewLine}";
-                Console.Write(text);
+                var output = string.Join(" ", text);
+                output = (omitNewLineOpt) ? output : $"{output}{Environment.NewLine}";
+                Console.Write(output);
             },
             textArg, omitNewLineOpt);
 
